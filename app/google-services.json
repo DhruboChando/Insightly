@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "879538075733",
+    "project_id": "insightly-94be3",
+    "storage_bucket": "insightly-94be3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:879538075733:android:e58a837656abad83a7fcdc",
+        "android_client_info": {
+          "package_name": "com.example.insightly"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkzf0Ik13HzdGJIcrXBjHJi8LHT7tw5ro"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
