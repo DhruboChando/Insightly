@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
                     email.setError("Email is empty!");
                     email.requestFocus();
 
-                }else if (password1.isEmpty()) {
+                } else if (password1.isEmpty()) {
                     password.setError("Password is empty!");
                     password.requestFocus();
 
@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                                             Intent intent = new Intent(getApplicationContext(), HomePage.class);
                                             startActivity(intent);
                                             finish();
-                                        }else {
+                                        } else {
                                             //Email is not verified
                                             Toast.makeText(getApplicationContext(), "Email is not verified!", Toast.LENGTH_SHORT).show();
                                         }
