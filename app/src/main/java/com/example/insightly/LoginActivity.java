@@ -12,8 +12,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Firebase;
@@ -28,6 +34,8 @@ public class LoginActivity extends AppCompatActivity {
     private ImageView googleBtn, facebookBtn;
     private FirebaseAuth auth;
     private ProgressBar progressBar;
+    GoogleSignInOptions googleSignInOptions;
+    GoogleSignInClient googleSignInClient;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -45,6 +53,9 @@ public class LoginActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         progressBar = findViewById(R.id.pb_progress);
+
+        googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        googleSignInClient = GoogleSignIn.getClient(getApplicationContext(), googleSignInOptions);
 
         logIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,9 +91,7 @@ public class LoginActivity extends AppCompatActivity {
                                         //Email verification, extra security
                                         if(user != null && user.isEmailVerified()) {
                                             Toast.makeText(getApplicationContext(), "Login successful!", Toast.LENGTH_SHORT).show();
-                                            Intent intent = new Intent(getApplicationContext(), HomePage.class);
-                                            startActivity(intent);
-                                            finish();
+                                            navigateToHome();
                                         } else {
                                             //Email is not verified
                                             Toast.makeText(getApplicationContext(), "Email is not verified!", Toast.LENGTH_SHORT).show();
@@ -115,6 +124,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Sign up using google!", Toast.LENGTH_SHORT).show();
+                googleSignIn();
 
             }
         });
@@ -127,5 +137,45 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void googleSignIn() {
+        Intent signInIntent = googleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, 1000);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 1000) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+
+            try {
+                task.getResult(ApiException.class);
+                navigateToHome();
+            } catch (ApiException e) {
+                Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void navigateToHome() {
+        Intent intent = new Intent(getApplicationContext(), HomePage.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // Check for existing Google Sign In account, if the user is already signed in
+        // the GoogleSignInAccount will be non-null.
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+
+        if(account != null) {
+            Toast.makeText(getApplicationContext(), "You are already signed in", Toast.LENGTH_SHORT).show();
+        }
     }
 }

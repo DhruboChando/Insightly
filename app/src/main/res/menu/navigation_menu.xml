@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home_item"
+        android:title="Home"
+        android:icon="@drawable/vector_home" />
+
+    <item
+        android:id="@+id/search_item"
+        android:title="Search"
+        android:icon="@drawable/vector_email" />
+
+    <item
+        android:id="@+id/option2_item"
+        android:title="Favorites"
+        android:icon="@drawable/vector_lock" />
+
+    <item
+        android:id="@+id/option3_item"
+        android:title="Profile"
+        android:icon="@drawable/vector_account_circle" />
+</menu>
