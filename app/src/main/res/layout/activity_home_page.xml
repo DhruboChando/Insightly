@@ -33,7 +33,8 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:src="@drawable/user"
-                    android:contentDescription="Profile" />
+                    android:contentDescription="Profile"
+                    android:id="@+id/iv_profile"/>
             </LinearLayout>
 
             <TextView
@@ -50,7 +51,8 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/notification"
-                android:contentDescription="Notifications" />
+                android:contentDescription="Notifications"
+                android:id="@+id/iv_notifications"/>
         </LinearLayout>
 
         <!-- FrameLayout to host fragments -->
