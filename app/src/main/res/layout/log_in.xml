@@ -46,7 +46,7 @@
         android:background="@drawable/box_shape"
         android:hint="Password"
         android:id="@+id/et_password"
-        android:drawableStart="@drawable/vector_lock"
+        android:drawableStart="@drawable/password"
         android:drawablePadding="10dp"
         android:inputType="textPassword"
         android:padding="10dp"

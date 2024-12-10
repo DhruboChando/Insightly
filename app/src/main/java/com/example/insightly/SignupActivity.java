@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -158,7 +160,7 @@ public class SignupActivity extends AppCompatActivity {
                     .addOnCompleteListener(task -> {
                         progressBar.setVisibility(View.GONE);
                         if (task.isSuccessful()) {
-                            Log.d(TAG, "createUserWithEmail:success");
+                            Toast.makeText(getApplicationContext(), "createUserWithEmail:success", Toast.LENGTH_SHORT).show();
                             FirebaseUser user = auth.getCurrentUser();
                             if (user != null) {
                                 user.sendEmailVerification()
@@ -189,6 +191,42 @@ public class SignupActivity extends AppCompatActivity {
         logIn.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
+        });
+
+        final boolean[] visibility = {true};
+        //password show
+        hide1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(visibility[0]) {
+                    password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
+                } else {
+                    password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+
+                }
+                // Move cursor to the end of the text
+                password.setSelection(password.getText().length());
+                visibility[0] = !visibility[0];
+
+            }
+        });
+
+        hide2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(visibility[0]) {
+                    password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
+                } else {
+                    password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+
+                }
+                // Move cursor to the end of the text
+                password.setSelection(password.getText().length());
+                visibility[0] = !visibility[0];
+
+            }
         });
     }
 }

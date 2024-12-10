@@ -23,9 +23,13 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Firebase;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText email, password;
@@ -60,7 +64,8 @@ public class LoginActivity extends AppCompatActivity {
         logIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
+                //already clicked, disable log in button
+                logIn.setEnabled(false);
 
                 Toast.makeText(getApplicationContext(), "Login pressed!", Toast.LENGTH_SHORT).show();
 
@@ -77,6 +82,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 }
                 else {
+                    progressBar.setVisibility(View.VISIBLE);
+
                     //login via email and password
                     auth.signInWithEmailAndPassword(email1, password1).addOnCompleteListener(
                             new OnCompleteListener<AuthResult>() {
@@ -100,14 +107,26 @@ public class LoginActivity extends AppCompatActivity {
                                     }
                                     else {
                                         Toast.makeText(getApplicationContext(), "Login failed!", Toast.LENGTH_SHORT).show();
+
+                                        if (!task.isSuccessful()) {
+                                            String errorMessage;
+                                            try {
+                                                throw task.getException();
+                                            } catch (FirebaseAuthInvalidUserException e) {
+                                                errorMessage = "No account found with this email!";
+                                            } catch (FirebaseAuthInvalidCredentialsException e) {
+                                                errorMessage = "Invalid password!";
+                                            } catch (Exception e) {
+                                                errorMessage = "Login failed. Please try again.";
+                                            }
+                                            Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                                        }
                                     }
 
                                 }
                             }
                     );
                 }
-
-
 
             }
         });
@@ -124,7 +143,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Sign up using google!", Toast.LENGTH_SHORT).show();
-                googleSignIn();
+                //firebaseAuthWithGoogle(googleSignInClient);
 
             }
         });
@@ -133,32 +152,49 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Sign up using fb!", Toast.LENGTH_SHORT).show();
-
+                facebookSignIn();
             }
         });
 
+
     }
 
-    private void googleSignIn() {
-        Intent signInIntent = googleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, 1000);
+    private void facebookSignIn() {
+        Toast.makeText(getApplicationContext(), "Currently not available!", Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+//    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
+//        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+//        auth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+//            @Override
+//            public void onComplete(@NonNull Task<AuthResult> task) {
+//                if (task.isSuccessful()) {
+//                    Toast.makeText(getApplicationContext(), "Google sign-in successful!", Toast.LENGTH_SHORT).show();
+//                    navigateToHome();
+//                } else {
+//                    Toast.makeText(getApplicationContext(), "Google sign-in failed!", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
+//    }
+//
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        if (requestCode == 1000) {
+//            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+//            try {
+//                GoogleSignInAccount account = task.getResult(ApiException.class);
+//                if (account != null) {
+//                    firebaseAuthWithGoogle(account);
+//                }
+//            } catch (ApiException e) {
+//                Toast.makeText(getApplicationContext(), "Google sign-in failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//    }
 
-        if(requestCode == 1000) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-
-            try {
-                task.getResult(ApiException.class);
-                navigateToHome();
-            } catch (ApiException e) {
-                Toast.makeText(getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
 
     private void navigateToHome() {
         Intent intent = new Intent(getApplicationContext(), HomePage.class);

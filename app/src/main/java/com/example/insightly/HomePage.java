@@ -28,13 +28,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationBarView;
 
 public class HomePage extends AppCompatActivity {
-//    private TextView name, email;
-//    private Button logOut;
-//    private GoogleSignInOptions googleSignInOptions;
-//    private GoogleSignInClient googleSignInClient;
-
+    private TextView name, email;
+    private Button logOut;
+    private GoogleSignInOptions googleSignInOptions;
+    private GoogleSignInClient googleSignInClient;
     ActivityHomePageBinding binding;
 
+    @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,28 +57,24 @@ public class HomePage extends AppCompatActivity {
             return true;
         });
 
-//        name = findViewById(R.id.tv_name);
-//        email = findViewById(R.id.tv_email);
-//        logOut = findViewById(R.id.btn_logout);
-//
-//        googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-//        googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
-//
-//        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-//        if(account != null) {
-//            String personName = account.getDisplayName();
-//            String emailId = account.getEmail();
-//
-//            name.setText(personName);
-//            email.setText(emailId);
-//        }
-//
-//        logOut.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                signOut();
-//            }
-//        });
+        googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
+
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
+        if(account != null) {
+            String personName = account.getDisplayName();
+            String emailId = account.getEmail();
+
+            name.setText(personName);
+            email.setText(emailId);
+        }
+
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signOut();
+            }
+        });
 
     }
 
@@ -90,14 +86,14 @@ public class HomePage extends AppCompatActivity {
 
     }
 
-//    private void signOut() {
-//        googleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
-//            @Override
-//            public void onComplete(@NonNull Task<Void> task) {
-//                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-//                startActivity(intent);
-//                finish();
-//            }
-//        });
-//    }
+    private void signOut() {
+        googleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+    }
 }
