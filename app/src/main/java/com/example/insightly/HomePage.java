@@ -117,6 +117,7 @@ public class HomePage extends AppCompatActivity {
         });
     }
 
+    //replaceFragment
     private void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
